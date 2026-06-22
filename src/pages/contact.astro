@@ -1,0 +1,47 @@
+---
+import MapSection from "../components/MapSection.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import { siteConfig } from "../data/site";
+---
+
+<MainLayout
+  title={`${siteConfig.name} | Contact`}
+  description="Contact details and social links for Masjid Benawf."
+  currentPath="/contact"
+>
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Contact"
+        title="Get in touch with the mosque"
+        copy="The contact page keeps the information clean and accessible while pointing visitors toward the social platforms already used by the mosque."
+        eyebrowKey="contactPage.eyebrow"
+        titleKey="contactPage.title"
+        copyKey="contactPage.copy"
+      />
+
+      <div class="contact-grid" style="margin-top: 1.5rem;">
+        <article class="card contact-card">
+          <h3 data-i18n="contactPage.detailsTitle">Contact details</h3>
+          <p class="section-copy" data-i18n="contactPage.phone">Phone: {siteConfig.phone}</p>
+          <p class="section-copy" data-i18n="contactPage.email">Email: {siteConfig.email}</p>
+          <p class="section-copy" data-i18n="map.addressLine">{siteConfig.addressLine}</p>
+        </article>
+
+        <article class="card contact-card surface-accent">
+          <h3 data-i18n="contactPage.socialTitle">Social platforms</h3>
+          <div class="social-list">
+            <a class="social-chip" href={siteConfig.facebookUrl} target="_blank" rel="noreferrer" data-i18n="contactPage.facebookPage">Facebook page</a>
+            <a class="social-chip" href={siteConfig.youtubeUrl} target="_blank" rel="noreferrer" data-i18n="contactPage.youtubeChannel">YouTube channel</a>
+          </div>
+          <p class="section-copy" style="margin-top: 1rem;" data-i18n="contactPage.socialCopy">
+            These links are already wired into the layout so the same sources are available from the homepage and footer.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <MapSection />
+</MainLayout>

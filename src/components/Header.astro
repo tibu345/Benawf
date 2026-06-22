@@ -1,0 +1,40 @@
+---
+import { navigation, siteConfig } from "../data/site";
+
+interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="brand" href="/" aria-label={`${siteConfig.name} home`}>
+      <img src="/assets/masjid-benawf-logo.jpg" alt={`${siteConfig.name} logo`} width="96" height="96" />
+      <span>
+        <span class="brand__name">{siteConfig.name}</span>
+        <span class="brand__sub" data-i18n="brand.tagline">Prayer, learning, and community</span>
+      </span>
+    </a>
+
+    <nav class="nav" aria-label="Primary navigation">
+      {navigation.map((item) => (
+        <a href={item.href} aria-current={currentPath === item.href ? "page" : undefined} data-i18n={`nav.${item.href}`}>
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="header-actions">
+      <div class="language-switcher" aria-label="Language selector">
+        <button class="language-switcher__button" type="button" data-lang-button="en">EN</button>
+        <button class="language-switcher__button is-active" type="button" data-lang-button="ar">AR</button>
+      </div>
+
+      <a class="button button-primary" href={siteConfig.facebookUrl} target="_blank" rel="noreferrer" data-i18n="header.communityUpdates">
+        Community Updates
+      </a>
+    </div>
+  </div>
+</header>

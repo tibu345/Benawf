@@ -1,0 +1,19 @@
+---
+import type { UpdateItem } from "../data/site";
+
+interface Props {
+  items: UpdateItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="updates-grid">
+  {items.map((item) => (
+    <article class="card update-card">
+      <p class="small" data-i18n={`updates.items.${item.title}.date`}>{item.date}</p>
+      <h3 data-i18n={`updates.items.${item.title}.title`}>{item.title}</h3>
+      <p class="section-copy" data-i18n={`updates.items.${item.title}.summary`}>{item.summary}</p>
+    </article>
+  ))}
+</div>

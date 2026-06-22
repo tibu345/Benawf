@@ -1,0 +1,109 @@
+---
+import Hero from "../components/Hero.astro";
+import MapSection from "../components/MapSection.astro";
+import PrayerTimesGrid from "../components/PrayerTimesGrid.astro";
+import ProgramCard from "../components/ProgramCard.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import UpdateList from "../components/UpdateList.astro";
+import VideoCard from "../components/VideoCard.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import { prayerTimes, programs, siteConfig, updates, videos } from "../data/site";
+---
+
+<MainLayout title={`${siteConfig.name} | Home`} currentPath="/">
+  <Hero />
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Prayer"
+        title="Today's prayer times"
+        copy="Prayer times are currently powered by mock data and structured so a live provider or mosque-managed schedule can be plugged in later."
+        eyebrowKey="home.prayer.eyebrow"
+        titleKey="home.prayer.title"
+        copyKey="home.prayer.copy"
+      />
+      <div style="margin-top: 1.5rem;">
+        <PrayerTimesGrid prayers={prayerTimes} />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container about-grid">
+      <div>
+        <SectionHeading
+          eyebrow="About"
+          title="A modern mosque website built around clarity and calm"
+          copy="Masjid Benawf is presented here as a content-first mosque site: easy to browse on mobile, easy to discover through search, and easy to maintain as content grows."
+          eyebrowKey="home.about.eyebrow"
+          titleKey="home.about.title"
+          copyKey="home.about.copy"
+        />
+      </div>
+      <div class="card program-card surface-accent">
+        <h3 data-i18n="home.about.nextTitle">What this structure is ready for next</h3>
+        <div class="pill-list">
+          <span class="pill" data-i18n="home.about.pill1">Live prayer API</span>
+          <span class="pill" data-i18n="home.about.pill2">YouTube feed</span>
+          <span class="pill" data-i18n="home.about.pill3">Facebook updates</span>
+          <span class="pill" data-i18n="home.about.pill4">CMS content</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Programs"
+        title="Programs and services"
+        copy="Reusable cards keep the homepage concise while the full programs page can expand with registration links, teachers, and schedules later."
+        eyebrowKey="home.programs.eyebrow"
+        titleKey="home.programs.title"
+        copyKey="home.programs.copy"
+      />
+      <div class="program-grid" style="margin-top: 1.5rem;">
+        {programs.map((program) => (
+          <ProgramCard program={program} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Media"
+        title="Latest YouTube videos"
+        copy="These cards use mock content now and already point visitors toward the Masjid Benawf YouTube channel."
+        eyebrowKey="home.media.eyebrow"
+        titleKey="home.media.title"
+        copyKey="home.media.copy"
+      />
+      <div class="video-grid" style="margin-top: 1.5rem;">
+        {videos.map((video) => (
+          <VideoCard video={video} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Community"
+        title="Community updates"
+        copy="A compact announcement section keeps recent notices visible without turning the site into a heavy dashboard."
+        eyebrowKey="home.community.eyebrow"
+        titleKey="home.community.title"
+        copyKey="home.community.copy"
+      />
+      <div style="margin-top: 1.5rem;">
+        <UpdateList items={updates} />
+      </div>
+    </div>
+  </section>
+
+  <MapSection />
+</MainLayout>

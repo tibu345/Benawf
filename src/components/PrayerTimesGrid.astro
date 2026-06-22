@@ -1,0 +1,166 @@
+---
+import type { PrayerTime } from "../data/site";
+import { siteConfig } from "../data/site";
+import { getCurrentPrayer, getMinutesInTimezone } from "../utils/prayer";
+
+interface Props {
+  prayers: PrayerTime[];
+  compact?: boolean;
+}
+
+const { prayers, compact = false } = Astro.props;
+const initialState = getCurrentPrayer(prayers, getMinutesInTimezone(siteConfig.timezone));
+---
+
+<div
+  class="prayer-grid"
+  data-prayer-grid
+  data-timezone={siteConfig.timezone}
+  data-prayers={JSON.stringify(prayers)}
+>
+  {prayers.map((prayer) => {
+    const isCurrent = initialState.current.key === prayer.key;
+
+    return (
+      <article class="card prayer-card" data-prayer-card data-key={prayer.key} data-current={isCurrent ? "true" : "false"}>
+        <span class="prayer-card__badge" data-i18n="prayer.currentBadge">Current</span>
+        <p class="prayer-card__meta" data-i18n={`prayer.names.${prayer.key}`}>{prayer.name}</p>
+        <h3 class="prayer-card__time">{prayer.adhan}</h3>
+        <p class="prayer-card__note" data-prayer-note>
+          {prayer.iqamah ? `Iqamah ${prayer.iqamah}` : prayer.note}
+        </p>
+      </article>
+    );
+  })}
+</div>
+
+{!compact && (
+  <p class="small" data-current-summary>
+    Current prayer: {initialState.current.name}. Next prayer: {initialState.next.name}.
+  </p>
+)}
+
+<script is:inline>
+  const prayerTranslations = {
+    en: {
+      currentBadge: "Current",
+      currentPrayer: "Current prayer",
+      nextPrayer: "Next prayer",
+      iqamah: "Iqamah",
+      names: {
+        fajr: "Fajr",
+        sunrise: "Sunrise",
+        dhuhr: "Dhuhr",
+        asr: "Asr",
+        maghrib: "Maghrib",
+        isha: "Isha",
+        jumuah: "Jumu'ah"
+      },
+      notes: {
+        sunrise: "No congregational prayer",
+        jumuah: "Khutbah begins at 12:45 on Fridays"
+      }
+    },
+    ar: {
+      currentBadge: "الحالية",
+      currentPrayer: "الصلاة الحالية",
+      nextPrayer: "الصلاة التالية",
+      iqamah: "الإقامة",
+      names: {
+        fajr: "الفجر",
+        sunrise: "الشروق",
+        dhuhr: "الظهر",
+        asr: "العصر",
+        maghrib: "المغرب",
+        isha: "العشاء",
+        jumuah: "الجمعة"
+      },
+      notes: {
+        sunrise: "للعرض فقط ولا توجد صلاة جماعة",
+        jumuah: "تبدأ الخطبة الساعة 12:45 يوم الجمعة"
+      }
+    }
+  };
+
+  const activeKeys = ["fajr", "dhuhr", "asr", "maghrib", "isha"];
+
+  const toMinutes = (value) => {
+    const [hours, minutes] = value.split(":").map(Number);
+    return hours * 60 + minutes;
+  };
+
+  const getMinutesInTimezone = (timeZone) => {
+    const parts = new Intl.DateTimeFormat("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+      timeZone
+    }).formatToParts(new Date());
+
+    const hour = Number(parts.find((part) => part.type === "hour")?.value ?? "0");
+    const minute = Number(parts.find((part) => part.type === "minute")?.value ?? "0");
+    return hour * 60 + minute;
+  };
+
+  const getCurrentPrayer = (prayers, currentMinutes) => {
+    const dailyPrayers = prayers
+      .filter((prayer) => activeKeys.includes(prayer.key))
+      .sort((a, b) => toMinutes(a.adhan) - toMinutes(b.adhan));
+
+    let current = dailyPrayers[dailyPrayers.length - 1];
+    let next = dailyPrayers[0];
+
+    for (let index = 0; index < dailyPrayers.length; index += 1) {
+      const prayer = dailyPrayers[index];
+      const prayerMinutes = toMinutes(prayer.adhan);
+      const nextPrayer = dailyPrayers[(index + 1) % dailyPrayers.length];
+
+      if (currentMinutes >= prayerMinutes) {
+        current = prayer;
+        next = nextPrayer;
+      } else {
+        if (index === 0) {
+          current = dailyPrayers[dailyPrayers.length - 1];
+          next = prayer;
+        }
+        break;
+      }
+    }
+
+    return { current, next };
+  };
+
+  const grids = document.querySelectorAll("[data-prayer-grid]");
+
+  grids.forEach((grid) => {
+    const prayers = JSON.parse(grid.getAttribute("data-prayers") ?? "[]");
+    const timeZone = grid.getAttribute("data-timezone") ?? "Asia/Beirut";
+    const summary = grid.parentElement?.querySelector("[data-current-summary]");
+
+    const updatePrayerState = () => {
+      const lang = document.body.dataset.lang === "ar" ? "ar" : "en";
+      const t = prayerTranslations[lang];
+      const state = getCurrentPrayer(prayers, getMinutesInTimezone(timeZone));
+      const cards = grid.querySelectorAll("[data-prayer-card]");
+
+      cards.forEach((card) => {
+        const isCurrent = card.getAttribute("data-key") === state.current.key;
+        const key = card.getAttribute("data-key");
+        const note = card.querySelector("[data-prayer-note]");
+        card.setAttribute("data-current", isCurrent ? "true" : "false");
+
+        if (note && key) {
+          const prayer = prayers.find((item) => item.key === key);
+          note.textContent = prayer?.iqamah ? `${t.iqamah} ${prayer.iqamah}` : t.notes[key] || prayer?.note || "";
+        }
+      });
+
+      if (summary) {
+        summary.textContent = `${t.currentPrayer}: ${t.names[state.current.key]}. ${t.nextPrayer}: ${t.names[state.next.key]}.`;
+      }
+    };
+
+    updatePrayerState();
+    window.setInterval(updatePrayerState, 60000);
+  });
+</script>

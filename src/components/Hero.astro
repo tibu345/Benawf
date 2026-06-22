@@ -1,0 +1,39 @@
+---
+import { aboutStats, siteConfig } from "../data/site";
+---
+
+<section class="hero">
+  <div class="container hero__grid">
+    <div>
+      <span class="eyebrow" data-i18n="hero.eyebrow">Assalamu Alaikum</span>
+      <h1 class="section-title" data-i18n="hero.title">Welcome to {siteConfig.name}</h1>
+      <p class="section-copy" data-i18n="hero.copy">{siteConfig.heroMessage}</p>
+
+      <div class="button-row" style="margin-top: 1.5rem;">
+        <a class="button button-primary" href="/prayer-times" data-i18n="hero.primaryCta">View Prayer Times</a>
+        <a class="button button-secondary" href={siteConfig.youtubeUrl} target="_blank" rel="noreferrer" data-i18n="hero.secondaryCta">
+          Watch on YouTube
+        </a>
+      </div>
+
+      <div class="stats" aria-label="Mosque highlights">
+        {aboutStats.map((item) => (
+          <div class="stat">
+            <strong>{item.value}</strong>
+            <span>{item.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="hero__visual">
+      <img
+        class="hero__image"
+        src="/assets/masjid-benawf-exterior.jpg"
+        alt="Masjid Benawf exterior illuminated at night"
+        width="960"
+        height="1280"
+      />
+    </div>
+  </div>
+</section>

@@ -1,0 +1,19 @@
+---
+import type { Program } from "../data/site";
+
+interface Props {
+  program: Program;
+}
+
+const { program } = Astro.props;
+---
+
+<article class="card program-card">
+  <div class="program-card__icon" aria-hidden="true">{program.icon}</div>
+  <h3 data-i18n={`programs.items.${program.title}.title`}>{program.title}</h3>
+  <p class="section-copy" data-i18n={`programs.items.${program.title}.summary`}>{program.summary}</p>
+  <div class="meta-list">
+    <span class="meta-chip" data-i18n={`programs.items.${program.title}.schedule`}>{program.schedule}</span>
+    <span class="meta-chip" data-i18n={`programs.items.${program.title}.audience`}>{program.audience}</span>
+  </div>
+</article>

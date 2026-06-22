@@ -1,0 +1,31 @@
+---
+import ProgramCard from "../components/ProgramCard.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import { programs, siteConfig } from "../data/site";
+---
+
+<MainLayout
+  title={`${siteConfig.name} | Programs`}
+  description="Programs and services at Masjid Benawf, from daily prayer to Qur'an circles and community support."
+  currentPath="/programs"
+>
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Programs"
+        title="Programs built around worship and service"
+        copy="Each card is fed from shared mock data, so this page and the homepage stay in sync and remain easy to update."
+        eyebrowKey="programsPage.eyebrow"
+        titleKey="programsPage.title"
+        copyKey="programsPage.copy"
+      />
+
+      <div class="program-grid" style="margin-top: 1.5rem;">
+        {programs.map((program) => (
+          <ProgramCard program={program} />
+        ))}
+      </div>
+    </div>
+  </section>
+</MainLayout>

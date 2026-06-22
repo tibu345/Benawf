@@ -1,0 +1,18 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  copy?: string;
+  eyebrowKey?: string;
+  titleKey?: string;
+  copyKey?: string;
+}
+
+const { eyebrow, title, copy, eyebrowKey, titleKey, copyKey } = Astro.props;
+---
+
+<div>
+  {eyebrow && <span class="eyebrow" data-i18n={eyebrowKey}>{eyebrow}</span>}
+  <h2 class="section-title" data-i18n={titleKey}>{title}</h2>
+  {copy && <p class="section-copy" data-i18n={copyKey}>{copy}</p>}
+</div>

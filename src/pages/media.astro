@@ -1,0 +1,36 @@
+---
+import SectionHeading from "../components/SectionHeading.astro";
+import VideoCard from "../components/VideoCard.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import { siteConfig, videos } from "../data/site";
+---
+
+<MainLayout
+  title={`${siteConfig.name} | Media`}
+  description="Masjid Benawf media page featuring YouTube-focused content cards and room for future sermon archives."
+  currentPath="/media"
+>
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Media"
+        title="Video reminders and community media"
+        copy="This page is intentionally light and content-focused. It can later expand into playlists, sermon archives, livestream embeds, or automatic YouTube synchronization."
+        eyebrowKey="mediaPage.eyebrow"
+        titleKey="mediaPage.title"
+        copyKey="mediaPage.copy"
+      />
+
+      <div class="button-row" style="margin-top: 1.2rem;">
+        <a class="button button-primary" href={siteConfig.youtubeUrl} target="_blank" rel="noreferrer" data-i18n="mediaPage.visitYoutube">Visit YouTube</a>
+        <a class="button button-secondary" href={siteConfig.facebookUrl} target="_blank" rel="noreferrer" data-i18n="mediaPage.openFacebook">Open Facebook</a>
+      </div>
+
+      <div class="video-grid" style="margin-top: 1.5rem;">
+        {videos.map((video) => (
+          <VideoCard video={video} />
+        ))}
+      </div>
+    </div>
+  </section>
+</MainLayout>

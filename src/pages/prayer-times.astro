@@ -1,0 +1,42 @@
+---
+import PrayerTimesGrid from "../components/PrayerTimesGrid.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import { prayerTimes, siteConfig } from "../data/site";
+---
+
+<MainLayout
+  title={`${siteConfig.name} | Prayer Times`}
+  description="Prayer times for Masjid Benawf with a highlighted current prayer and a structure ready for live scheduling data."
+  currentPath="/prayer-times"
+>
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Prayer Times"
+        title="Daily salah schedule"
+        copy="The current prayer is highlighted automatically using the mosque timezone. Replace the mock schedule with a live feed whenever needed without redesigning the page."
+        eyebrowKey="prayerPage.eyebrow"
+        titleKey="prayerPage.title"
+        copyKey="prayerPage.copy"
+      />
+
+      <div class="card split-panel surface-accent" style="margin-top: 1.5rem;">
+        <div>
+          <h3 data-i18n="prayerPage.scheduleTitle">Prayer schedule</h3>
+          <PrayerTimesGrid prayers={prayerTimes} />
+        </div>
+
+        <div class="contact-card">
+          <h3 data-i18n="prayerPage.notesTitle">Notes</h3>
+          <p class="section-copy" data-i18n="prayerPage.note1">Sunrise is displayed for reference only and has no congregational prayer.</p>
+          <p class="section-copy" data-i18n="prayerPage.note2">Jumu'ah is listed separately to keep the weekday prayer cycle clear.</p>
+          <div class="meta-list" style="margin-top: 1rem;">
+            <span class="meta-chip" data-i18n="prayerPage.timezone">Timezone {siteConfig.timezone}</span>
+            <span class="meta-chip" data-i18n="prayerPage.mockData">Mock data ready for APIs</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</MainLayout>

@@ -1,0 +1,21 @@
+---
+import type { VideoItem } from "../data/site";
+
+interface Props {
+  video: VideoItem;
+}
+
+const { video } = Astro.props;
+---
+
+<article class="card video-card">
+  <a href={video.href} target="_blank" rel="noreferrer" aria-label={`Watch ${video.title} on YouTube`}>
+    <div class="video-card__thumb">
+      <span class="video-card__duration" data-i18n={`videos.items.${video.title}.duration`}>{video.duration}</span>
+    </div>
+  </a>
+  <p class="small" data-i18n={`videos.items.${video.title}.published`}>{video.published}</p>
+  <h3 data-i18n={`videos.items.${video.title}.title`}>{video.title}</h3>
+  <p class="section-copy" data-i18n={`videos.items.${video.title}.summary`}>{video.summary}</p>
+  <a class="button button-secondary" href={video.href} target="_blank" rel="noreferrer" data-i18n="videos.openYoutube">Open YouTube</a>
+</article>

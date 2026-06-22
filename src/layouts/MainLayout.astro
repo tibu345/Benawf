@@ -1,0 +1,318 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { siteConfig } from "../data/site";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+  currentPath?: string;
+}
+
+const { title, description = siteConfig.description, currentPath = "/" } = Astro.props;
+
+const baseSite = Astro.site ?? "https://masjidbenawf.example";
+const canonical = new URL(currentPath, baseSite).toString();
+const socialImage = new URL("/assets/masjid-benawf-logo.jpg", baseSite).toString();
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Mosque",
+  name: siteConfig.name,
+  description,
+  url: Astro.site ?? "https://masjidbenawf.example",
+  sameAs: [siteConfig.facebookUrl, siteConfig.youtubeUrl],
+  telephone: siteConfig.phone,
+  email: siteConfig.email
+};
+---
+
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content={siteConfig.primaryColor} />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/assets/masjid-benawf-logo.jpg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
+  </head>
+  <body>
+    <a class="visually-hidden" href="#main-content">Skip to content</a>
+    <Header currentPath={currentPath} />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer />
+    <script is:inline>
+      const translations = {
+        en: {
+          "brand.tagline": "Prayer, learning, and community",
+          "nav./": "Home",
+          "nav./prayer-times": "Prayer Times",
+          "nav./media": "Media",
+          "nav./programs": "Programs",
+          "nav./contact": "Contact",
+          "header.communityUpdates": "Community Updates",
+          "hero.eyebrow": "Assalamu Alaikum",
+          "hero.title": "Welcome to Masjid Benawf",
+          "hero.copy": "A calm place for salah, learning, and community connection.",
+          "hero.primaryCta": "View Prayer Times",
+          "hero.secondaryCta": "Watch on YouTube",
+          "home.prayer.eyebrow": "Prayer",
+          "home.prayer.title": "Today's prayer times",
+          "home.prayer.copy": "Prayer times are currently powered by mock data and structured so a live provider or mosque-managed schedule can be plugged in later.",
+          "home.about.eyebrow": "About",
+          "home.about.title": "A modern mosque website built around clarity and calm",
+          "home.about.copy": "Masjid Benawf is presented here as a content-first mosque site: easy to browse on mobile, easy to discover through search, and easy to maintain as content grows.",
+          "home.about.nextTitle": "What this structure is ready for next",
+          "home.about.pill1": "Live prayer API",
+          "home.about.pill2": "YouTube feed",
+          "home.about.pill3": "Facebook updates",
+          "home.about.pill4": "CMS content",
+          "home.programs.eyebrow": "Programs",
+          "home.programs.title": "Programs and services",
+          "home.programs.copy": "Reusable cards keep the homepage concise while the full programs page can expand with registration links, teachers, and schedules later.",
+          "home.media.eyebrow": "Media",
+          "home.media.title": "Latest YouTube videos",
+          "home.media.copy": "These cards use mock content now and already point visitors toward the Masjid Benawf YouTube channel.",
+          "home.community.eyebrow": "Community",
+          "home.community.title": "Community updates",
+          "home.community.copy": "A compact announcement section keeps recent notices visible without turning the site into a heavy dashboard.",
+          "prayer.currentBadge": "Current",
+          "map.eyebrow": "Visit",
+          "map.title": "Find the mosque and stay connected",
+          "map.copy": "Use the map for a quick location reference, then check Facebook for the most current local notices and announcements.",
+          "map.addressLine": "Visit the mosque and check the Facebook page for the latest local updates and directions.",
+          "map.openFacebook": "Open Facebook",
+          "map.contactPage": "Contact Page",
+          "prayerPage.eyebrow": "Prayer Times",
+          "prayerPage.title": "Daily salah schedule",
+          "prayerPage.copy": "The current prayer is highlighted automatically using the mosque timezone. Replace the mock schedule with a live feed whenever needed without redesigning the page.",
+          "prayerPage.scheduleTitle": "Prayer schedule",
+          "prayerPage.notesTitle": "Notes",
+          "prayerPage.note1": "Sunrise is displayed for reference only and has no congregational prayer.",
+          "prayerPage.note2": "Jumu'ah is listed separately to keep the weekday prayer cycle clear.",
+          "prayerPage.timezone": "Timezone Asia/Beirut",
+          "prayerPage.mockData": "Mock data ready for APIs",
+          "mediaPage.eyebrow": "Media",
+          "mediaPage.title": "Video reminders and community media",
+          "mediaPage.copy": "This page is intentionally light and content-focused. It can later expand into playlists, sermon archives, livestream embeds, or automatic YouTube synchronization.",
+          "mediaPage.visitYoutube": "Visit YouTube",
+          "mediaPage.openFacebook": "Open Facebook",
+          "programsPage.eyebrow": "Programs",
+          "programsPage.title": "Programs built around worship and service",
+          "programsPage.copy": "Each card is fed from shared mock data, so this page and the homepage stay in sync and remain easy to update.",
+          "contactPage.eyebrow": "Contact",
+          "contactPage.title": "Get in touch with the mosque",
+          "contactPage.copy": "The contact page keeps the information clean and accessible while pointing visitors toward the social platforms already used by the mosque.",
+          "contactPage.detailsTitle": "Contact details",
+          "contactPage.phone": "Phone: Replace with official phone",
+          "contactPage.email": "Email: Replace with official email",
+          "contactPage.socialTitle": "Social platforms",
+          "contactPage.facebookPage": "Facebook page",
+          "contactPage.youtubeChannel": "YouTube channel",
+          "contactPage.socialCopy": "These links are already wired into the layout so the same sources are available from the homepage and footer.",
+          "videos.openYoutube": "Open YouTube",
+          "programs.items.Daily Congregational Prayers.title": "Daily Congregational Prayers",
+          "programs.items.Daily Congregational Prayers.summary": "Five daily prayers in a calm, welcoming environment with short reminders after selected salawat.",
+          "programs.items.Daily Congregational Prayers.schedule": "Every day",
+          "programs.items.Daily Congregational Prayers.audience": "Open to all",
+          "programs.items.Qur'an Circles.title": "Qur'an Circles",
+          "programs.items.Qur'an Circles.summary": "Weekly recitation and tajwid sessions for youth and adults with beginner-friendly guidance.",
+          "programs.items.Qur'an Circles.schedule": "Tuesdays and Thursdays",
+          "programs.items.Qur'an Circles.audience": "Youth and adults",
+          "programs.items.Weekend Learning.title": "Weekend Learning",
+          "programs.items.Weekend Learning.summary": "Short lessons on fiqh, character, and family life designed for practical community benefit.",
+          "programs.items.Weekend Learning.schedule": "Saturday mornings",
+          "programs.items.Weekend Learning.audience": "Families",
+          "programs.items.Community Support.title": "Community Support",
+          "programs.items.Community Support.summary": "A care-focused program connecting community members with food support, visits, and emergency referrals.",
+          "programs.items.Community Support.schedule": "By request",
+          "programs.items.Community Support.audience": "Community members",
+          "videos.items.Friday Reminder: Steadiness in Worship.title": "Friday Reminder: Steadiness in Worship",
+          "videos.items.Friday Reminder: Steadiness in Worship.summary": "A short khutbah-style reflection from the Masjid Benawf YouTube presence.",
+          "videos.items.Friday Reminder: Steadiness in Worship.duration": "12 min",
+          "videos.items.Friday Reminder: Steadiness in Worship.published": "3 days ago",
+          "videos.items.Qur'an Reflection Session.title": "Qur'an Reflection Session",
+          "videos.items.Qur'an Reflection Session.summary": "A mock content entry showing how future YouTube API data can slot into the same card design.",
+          "videos.items.Qur'an Reflection Session.duration": "18 min",
+          "videos.items.Qur'an Reflection Session.published": "1 week ago",
+          "videos.items.Community Advice for Families.title": "Community Advice for Families",
+          "videos.items.Community Advice for Families.summary": "A practical talk format for mosque programming, classes, and recorded reminders.",
+          "videos.items.Community Advice for Families.duration": "9 min",
+          "videos.items.Community Advice for Families.published": "2 weeks ago",
+          "updates.items.Ramadan volunteer sign-up is open.title": "Ramadan volunteer sign-up is open",
+          "updates.items.Ramadan volunteer sign-up is open.date": "Apr 6",
+          "updates.items.Ramadan volunteer sign-up is open.summary": "Community members can help with iftar setup, welcome, and post-prayer cleanup.",
+          "updates.items.Family halaqah after Maghrib on Saturday.title": "Family halaqah after Maghrib on Saturday",
+          "updates.items.Family halaqah after Maghrib on Saturday.date": "Apr 10",
+          "updates.items.Family halaqah after Maghrib on Saturday.summary": "A short reminder followed by tea and conversation for families and youth.",
+          "updates.items.Monthly support drive.title": "Monthly support drive",
+          "updates.items.Monthly support drive.date": "Apr 14",
+          "updates.items.Monthly support drive.summary": "Collection for local families in need through the community support team.",
+          "footer.description": "Masjid Benawf is a welcoming mosque focused on prayer, Qur'an, learning, and community care.",
+          "footer.quickLinks": "Quick Links",
+          "footer.volunteer": "Volunteer",
+          "footer.supportUs": "Support Us",
+          "footer.membership": "Membership",
+          "footer.annualReport": "Annual Report",
+          "footer.connect": "Connect",
+          "footer.note": "Built as a fast static site with room for future real data sources."
+        },
+        ar: {
+          "brand.tagline": "الصلاة، التعلّم، والمجتمع",
+          "nav./": "الرئيسية",
+          "nav./prayer-times": "مواقيت الصلاة",
+          "nav./media": "الوسائط",
+          "nav./programs": "البرامج",
+          "nav./contact": "اتصل بنا",
+          "header.communityUpdates": "آخر التحديثات",
+          "hero.eyebrow": "السلام عليكم",
+          "hero.title": "مَرْحَبًا بِكُمْ فِي مَسْجِدِ الصَّحَابِيِّ الجَلِيلِ عَبْدِ الرَّحْمَنِ بْنِ عَوْفٍ",
+          "hero.copy": "مكان هادئ للصلاة والتعلّم والتواصل مع المجتمع.",
+          "hero.primaryCta": "عرض مواقيت الصلاة",
+          "hero.secondaryCta": "شاهد على يوتيوب",
+          "home.prayer.eyebrow": "الصلاة",
+          "home.prayer.title": "مواقيت صلاة اليوم",
+          "home.prayer.copy": "تستخدم المواقيت حالياً بيانات تجريبية مع بنية جاهزة لإضافة مصدر مباشر أو جدول يديره المسجد لاحقاً.",
+          "home.about.eyebrow": "عن المسجد",
+          "home.about.title": "موقع مسجد حديث قائم على الوضوح والهدوء",
+          "home.about.copy": "تم تقديم مسجد بن عوف هنا كموقع تعريفي سريع وسهل التصفح على الجوال وسهل التحديث مع نمو المحتوى.",
+          "home.about.nextTitle": "ما الذي يدعمه هذا الهيكل لاحقاً",
+          "home.about.pill1": "واجهة مواقيت مباشرة",
+          "home.about.pill2": "خلاصة يوتيوب",
+          "home.about.pill3": "تحديثات فيسبوك",
+          "home.about.pill4": "نظام إدارة محتوى",
+          "home.programs.eyebrow": "البرامج",
+          "home.programs.title": "البرامج والخدمات",
+          "home.programs.copy": "تُبقي المكوّنات القابلة لإعادة الاستخدام الصفحة الرئيسية مختصرة مع إمكانية توسيع صفحة البرامج لاحقاً.",
+          "home.media.eyebrow": "الوسائط",
+          "home.media.title": "أحدث فيديوهات يوتيوب",
+          "home.media.copy": "تستخدم هذه البطاقات بيانات تجريبية حالياً وتوجّه الزائر مباشرة إلى قناة المسجد على يوتيوب.",
+          "home.community.eyebrow": "المجتمع",
+          "home.community.title": "تحديثات المجتمع",
+          "home.community.copy": "قسم موجز للإعلانات يبقي آخر الأخبار ظاهرة من دون تحويل الموقع إلى لوحة معقّدة.",
+          "prayer.currentBadge": "الحالية",
+          "map.eyebrow": "الزيارة",
+          "map.title": "اعثر على المسجد وابقَ على تواصل",
+          "map.copy": "استخدم الخريطة كمرجع سريع للموقع، ثم راجع صفحة فيسبوك لأحدث الإعلانات والتنبيهات المحلية.",
+          "map.addressLine": "يمكنكم زيارة المسجد ومتابعة صفحة فيسبوك للاطلاع على آخر التحديثات المحلية والاتجاهات.",
+          "map.openFacebook": "افتح فيسبوك",
+          "map.contactPage": "صفحة التواصل",
+          "prayerPage.eyebrow": "مواقيت الصلاة",
+          "prayerPage.title": "جدول الصلوات اليومي",
+          "prayerPage.copy": "يتم تمييز الصلاة الحالية تلقائيًا بحسب توقيت المسجد. ويمكن استبدال الجدول التجريبي بمصدر مباشر لاحقًا دون إعادة تصميم الصفحة.",
+          "prayerPage.scheduleTitle": "جدول الصلاة",
+          "prayerPage.notesTitle": "ملاحظات",
+          "prayerPage.note1": "يُعرض الشروق للمرجعية فقط ولا توجد فيه صلاة جماعة.",
+          "prayerPage.note2": "أُدرجت صلاة الجمعة بشكل منفصل للحفاظ على وضوح جدول الصلوات اليومية.",
+          "prayerPage.timezone": "المنطقة الزمنية: Asia/Beirut",
+          "prayerPage.mockData": "بيانات تجريبية جاهزة للربط بواجهات برمجة",
+          "mediaPage.eyebrow": "الوسائط",
+          "mediaPage.title": "مرئيات تذكيرية ووسائط المجتمع",
+          "mediaPage.copy": "هذه الصفحة خفيفة ومركّزة على المحتوى. ويمكن توسيعها لاحقًا لتشمل قوائم تشغيل وأرشيف خُطب وبثًا مباشرًا ومزامنة تلقائية مع يوتيوب.",
+          "mediaPage.visitYoutube": "زيارة يوتيوب",
+          "mediaPage.openFacebook": "افتح فيسبوك",
+          "programsPage.eyebrow": "البرامج",
+          "programsPage.title": "برامج تدور حول العبادة والخدمة",
+          "programsPage.copy": "تُغذّى كل بطاقة من بيانات مشتركة، بحيث تبقى هذه الصفحة والصفحة الرئيسية متزامنتين وسهلتي التحديث.",
+          "contactPage.eyebrow": "تواصل",
+          "contactPage.title": "تواصل مع المسجد",
+          "contactPage.copy": "تحافظ صفحة التواصل على بساطة المعلومات ووضوحها مع توجيه الزائر إلى المنصات الاجتماعية التي يستخدمها المسجد.",
+          "contactPage.detailsTitle": "بيانات التواصل",
+          "contactPage.phone": "الهاتف: Replace with official phone",
+          "contactPage.email": "البريد الإلكتروني: Replace with official email",
+          "contactPage.socialTitle": "المنصات الاجتماعية",
+          "contactPage.facebookPage": "صفحة فيسبوك",
+          "contactPage.youtubeChannel": "قناة يوتيوب",
+          "contactPage.socialCopy": "هذه الروابط مدمجة بالفعل في التصميم بحيث تبقى المصادر نفسها متاحة من الصفحة الرئيسية والتذييل.",
+          "videos.openYoutube": "افتح يوتيوب",
+          "programs.items.Daily Congregational Prayers.title": "الصلوات الجماعية اليومية",
+          "programs.items.Daily Congregational Prayers.summary": "خمس صلوات يومية في أجواء هادئة ومرحّبة مع تذكيرات قصيرة بعد بعض الصلوات.",
+          "programs.items.Daily Congregational Prayers.schedule": "يوميًا",
+          "programs.items.Daily Congregational Prayers.audience": "مفتوح للجميع",
+          "programs.items.Qur'an Circles.title": "حلقات القرآن",
+          "programs.items.Qur'an Circles.summary": "جلسات أسبوعية للتلاوة والتجويد للشباب والبالغين بأسلوب مناسب للمبتدئين.",
+          "programs.items.Qur'an Circles.schedule": "الثلاثاء والخميس",
+          "programs.items.Qur'an Circles.audience": "الشباب والبالغون",
+          "programs.items.Weekend Learning.title": "التعلّم في عطلة الأسبوع",
+          "programs.items.Weekend Learning.summary": "دروس قصيرة في الفقه والأخلاق والحياة الأسرية ذات فائدة عملية للمجتمع.",
+          "programs.items.Weekend Learning.schedule": "صباح السبت",
+          "programs.items.Weekend Learning.audience": "العائلات",
+          "programs.items.Community Support.title": "الدعم المجتمعي",
+          "programs.items.Community Support.summary": "برنامج رعاية يربط أفراد المجتمع بالدعم الغذائي والزيارات والإحالات الطارئة.",
+          "programs.items.Community Support.schedule": "عند الطلب",
+          "programs.items.Community Support.audience": "أفراد المجتمع",
+          "videos.items.Friday Reminder: Steadiness in Worship.title": "تذكرة الجمعة: الثبات على العبادة",
+          "videos.items.Friday Reminder: Steadiness in Worship.summary": "مادة قصيرة بأسلوب خطابي مستوحاة من حضور مسجد بن عوف على يوتيوب.",
+          "videos.items.Friday Reminder: Steadiness in Worship.duration": "12 دقيقة",
+          "videos.items.Friday Reminder: Steadiness in Worship.published": "منذ 3 أيام",
+          "videos.items.Qur'an Reflection Session.title": "جلسة تدبّر قرآني",
+          "videos.items.Qur'an Reflection Session.summary": "مثال لمحتوى تجريبي يوضّح كيف يمكن دمج بيانات يوتيوب الحقيقية لاحقًا في التصميم نفسه.",
+          "videos.items.Qur'an Reflection Session.duration": "18 دقيقة",
+          "videos.items.Qur'an Reflection Session.published": "منذ أسبوع",
+          "videos.items.Community Advice for Families.title": "نصائح مجتمعية للأسر",
+          "videos.items.Community Advice for Families.summary": "صيغة عملية للمحاضرات والدروس والتذكيرات المسجلة ضمن برامج المسجد.",
+          "videos.items.Community Advice for Families.duration": "9 دقائق",
+          "videos.items.Community Advice for Families.published": "منذ أسبوعين",
+          "updates.items.Ramadan volunteer sign-up is open.title": "فتح التسجيل للتطوع في رمضان",
+          "updates.items.Ramadan volunteer sign-up is open.date": "6 أبريل",
+          "updates.items.Ramadan volunteer sign-up is open.summary": "يمكن لأفراد المجتمع المساعدة في تجهيز الإفطار والاستقبال والتنظيف بعد الصلاة.",
+          "updates.items.Family halaqah after Maghrib on Saturday.title": "حلقة عائلية بعد المغرب يوم السبت",
+          "updates.items.Family halaqah after Maghrib on Saturday.date": "10 أبريل",
+          "updates.items.Family halaqah after Maghrib on Saturday.summary": "تذكرة قصيرة يتبعها شاي وحديث ودي للعائلات والشباب.",
+          "updates.items.Monthly support drive.title": "حملة الدعم الشهرية",
+          "updates.items.Monthly support drive.date": "14 أبريل",
+          "updates.items.Monthly support drive.summary": "جمع تبرعات للعائلات المحتاجة محليًا عبر فريق الدعم المجتمعي.",
+          "footer.description": "مسجد بن عوف مسجدٌ مرحّب يركّز على الصلاة والقرآن والتعلّم وخدمة المجتمع.",
+          "footer.quickLinks": "روابط سريعة",
+          "footer.volunteer": "التطوع",
+          "footer.supportUs": "ادعمنا",
+          "footer.membership": "العضوية",
+          "footer.annualReport": "التقرير السنوي",
+          "footer.connect": "تواصل",
+          "footer.note": "موقع ثابت سريع مع جاهزية لإضافة مصادر بيانات حقيقية لاحقاً."
+        }
+      };
+
+      const applyLanguage = (lang) => {
+        const activeLang = translations[lang] ? lang : "en";
+        document.documentElement.lang = activeLang;
+        document.documentElement.dir = activeLang === "ar" ? "rtl" : "ltr";
+        document.body.dataset.lang = activeLang;
+
+        document.querySelectorAll("[data-i18n]").forEach((node) => {
+          const key = node.getAttribute("data-i18n");
+          if (key && translations[activeLang][key]) {
+            node.textContent = translations[activeLang][key];
+          }
+        });
+
+        document.querySelectorAll("[data-lang-button]").forEach((button) => {
+          button.classList.toggle("is-active", button.getAttribute("data-lang-button") === activeLang);
+        });
+
+        window.localStorage.setItem("site-language", activeLang);
+      };
+
+      const savedLanguage = window.localStorage.getItem("site-language") || "ar";
+      applyLanguage(savedLanguage);
+
+      document.querySelectorAll("[data-lang-button]").forEach((button) => {
+        button.addEventListener("click", () => {
+          applyLanguage(button.getAttribute("data-lang-button") || "en");
+        });
+      });
+    </script>
+  </body>
+</html>
