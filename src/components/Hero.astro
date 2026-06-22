@@ -1,5 +1,9 @@
 ---
 import { aboutStats, siteConfig } from "../data/site";
+
+const basePath = import.meta.env.BASE_URL;
+const withBase = (path: string) => `${basePath.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
+const exteriorUrl = withBase("/assets/masjid-benawf-exterior.jpg");
 ---
 
 <section class="hero">
@@ -10,7 +14,7 @@ import { aboutStats, siteConfig } from "../data/site";
       <p class="section-copy" data-i18n="hero.copy">{siteConfig.heroMessage}</p>
 
       <div class="button-row" style="margin-top: 1.5rem;">
-        <a class="button button-primary" href="/prayer-times" data-i18n="hero.primaryCta">View Prayer Times</a>
+        <a class="button button-primary" href={withBase("/prayer-times")} data-i18n="hero.primaryCta">View Prayer Times</a>
         <a class="button button-secondary" href={siteConfig.youtubeUrl} target="_blank" rel="noreferrer" data-i18n="hero.secondaryCta">
           Watch on YouTube
         </a>
@@ -29,7 +33,7 @@ import { aboutStats, siteConfig } from "../data/site";
     <div class="hero__visual">
       <img
         class="hero__image"
-        src="/assets/masjid-benawf-exterior.jpg"
+        src={exteriorUrl}
         alt="Masjid Benawf exterior illuminated at night"
         width="960"
         height="1280"

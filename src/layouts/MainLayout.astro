@@ -13,8 +13,11 @@ interface Props {
 const { title, description = siteConfig.description, currentPath = "/" } = Astro.props;
 
 const baseSite = Astro.site ?? "https://masjidbenawf.example";
-const canonical = new URL(currentPath, baseSite).toString();
-const socialImage = new URL("/assets/masjid-benawf-logo.jpg", baseSite).toString();
+const basePath = import.meta.env.BASE_URL;
+const withBase = (path: string) => `${basePath.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
+const canonical = new URL(withBase(currentPath), baseSite).toString();
+const logoUrl = withBase("/assets/masjid-benawf-logo.jpg");
+const socialImage = new URL(logoUrl, baseSite).toString();
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Mosque",
@@ -37,7 +40,7 @@ const organizationSchema = {
     <meta name="theme-color" content={siteConfig.primaryColor} />
     <meta name="robots" content="index,follow" />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" href="/assets/masjid-benawf-logo.jpg" />
+    <link rel="icon" href={logoUrl} />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
